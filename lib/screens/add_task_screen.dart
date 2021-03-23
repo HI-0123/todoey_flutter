@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey_flutter/models/task_data.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  String textFieldController;
+  String newTaskTitle;
 
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Color(0xFF757575),
         child: Container(
+          padding: EdgeInsets.all(30.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -15,16 +18,35 @@ class AddTaskScreen extends StatelessWidget {
                 topRight: Radius.circular(20.0)),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                padding: EdgeInsets.only(top: 30),
-                child: Text(
-                  'Add Task',
-                  style: TextStyle(color: Colors.lightBlueAccent, fontSize: 25),
-                ),
+              Text(
+                'Add Task',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.lightBlueAccent, fontSize: 30.0),
               ),
-              TextField(),
-              FloatingActionButton(onPressed: () {})
+              TextField(
+                  onChanged: (newText) {
+                    newTaskTitle = newText;
+                  },
+                  autofocus: true,
+                  textAlign: TextAlign.center),
+              Container(
+                  margin: EdgeInsets.only(top: 16),
+                  child: TextButton(
+                    child: Text(
+                      'Add',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.lightBlueAccent)),
+                    onPressed: () {
+                      Provider.of<TaskData>(context, listen: false)
+                          .addTask(newTaskTitle);
+                      Navigator.pop(context);
+                    },
+                  ))
             ],
           ),
         ));
